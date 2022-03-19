@@ -1,5 +1,5 @@
 """
-Entry point for blind test 
+Entry point for blind test
 ```
 python -m blindtest sum 1 3
 """
