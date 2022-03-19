@@ -1,11 +1,13 @@
 """
-Entry point for blind test 
+Entry point for blind test
 ```
 python -m blindtest sum 1 3
 """
 import typer
 
-app = typer.Typer(help="blindtest")
+from .scrap_data.spiders.scrap_singers import crawl_singer
+
+app = typer.Typer(name="blindtest")
 
 
 @app.command("pow")
@@ -19,6 +21,15 @@ def sum(
     b: int = typer.Argument(..., help="Second interger to sum"),
 ):
     typer.echo(f"Sum of {a} and {b} is {a+b}")
+
+
+@app.command("get-singers")
+def get_singers(
+    dest_path: str = typer.Argument(
+        "./data/singers.json", help="Path for singers file"
+    ),
+):
+    crawl_singer(dest_path=dest_path)
 
 
 if __name__ == "__main__":
