@@ -3,8 +3,11 @@ Entry point for blind test
 ```
 python -m blindtest sum 1 3
 """
+from pathlib import Path
+
 import typer
 
+from .scrap_data.formate_scraped_data import transform_scrapped_singers_to_csv
 from .scrap_data.spiders.scrap_singers import crawl_singer
 
 app = typer.Typer(name="blindtest")
@@ -25,11 +28,16 @@ def sum(
 
 @app.command("get-singers")
 def get_singers(
-    dest_path: str = typer.Argument(
-        "./data/singers.json", help="Path for singers file"
+    singer_file: Path = typer.Argument(
+        Path("./data/singers.csv"), help="Path for singers file"
     ),
 ):
-    crawl_singer(dest_path=dest_path)
+    scrapped_path = Path(singer_file).with_suffix(".json")
+    crawl_singer(dest_path=scrapped_path)
+    transform_scrapped_singers_to_csv(
+        scrapped_singer_path=scrapped_path, output_csv=singer_file
+    )
+    scrapped_path.unlink(missing_ok=True)
 
 
 if __name__ == "__main__":

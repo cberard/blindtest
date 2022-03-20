@@ -16,7 +16,7 @@ class Singer(Spider):
     def get_singer_info(self, singer_response, name):
         general_singer_infos = singer_response.css("div.infobox.infobox_v3 table tr")
         general_topics = general_singer_infos.css("tr")
-        singer_info = dict()
+        singer_info = dict(name=name)
         for general_topic in general_topics:
             topic = (
                 " ".join(general_topic.css("th *::text").getall())
